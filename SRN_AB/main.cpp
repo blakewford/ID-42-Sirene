@@ -532,52 +532,166 @@ unsigned long int getImageSize(const uint8_t *bitmap)
     {
         size = sizeof(menuText);
     }
-/*
-textGame
-textOver
-textHighscore
-textScore
-textStage
-textPause
-textTheEnd
-*/
+    else if(bitmap == textGame)
+    {
+        size = sizeof(textGame);
+    }
+    else if(bitmap == textOver)
+    {
+        size = sizeof(textOver);
+    }
+    else if(bitmap == textHighscore)
+    {
+        size = sizeof(textHighscore);
+    }
+    else if(bitmap == textScore)
+    {
+        size = sizeof(textScore);
+    }
+    else if(bitmap == textStage)
+    {
+        size = sizeof(textStage);
+    }
+    else if(bitmap == textPause)
+    {
+        size = sizeof(textPause);
+    }
+    else if(bitmap == textTheEnd)
+    {
+        size = sizeof(textTheEnd);
+    }
+    else if(bitmap == mermaid_plus_mask)
+    {
+        size = sizeof(mermaid_plus_mask);
+    }
     else if(bitmap == trident)
     {
         size = sizeof(trident);
     }
-/*
-bubbles
-seaShell
-magic
-weapons
-chargeSparkles
-chargeBar_plus_mask
-hearts
-numbersSmall
-numbersBig
-enemyFishy_plus_mask
-enemyFish_plus_mask
-enemyJellyfish_plus_mask
-enemyOctopus_plus_mask
-puff
-enemyBullets
-bossLife_plus_mask
-Shark
-seahorse
-seahorseFin
-seahorseTiny
-pirateshipBowsprit
-pirateshipCrowsnest
-pirateshipYardarm
-pirateshipSail
-pirateshipHull
-pirateSkull
-sunRay
-columnSmall_plus_mask
-columnBig_plus_mask
-powerUP_plus_mask
-protectionShield
-*/
+    else if(bitmap == bubbles)
+    {
+        size = sizeof(bubbles);
+    }
+    else if(bitmap == seaShell)
+    {
+        size = sizeof(seaShell);
+    }
+    else if(bitmap == magic)
+    {
+        size = sizeof(magic);
+    }
+    else if(bitmap == weapons)
+    {
+        size = sizeof(weapons);
+    }
+    else if(bitmap == chargeSparkles)
+    {
+        size = sizeof(chargeSparkles);
+    }
+    else if(bitmap == chargeBar_plus_mask)
+    {
+        size = sizeof(chargeBar_plus_mask);
+    }
+    else if(bitmap == hearts)
+    {
+        size = sizeof(hearts);
+    }
+    else if(bitmap == numbersSmall)
+    {
+        size = sizeof(numbersSmall);
+    }
+    else if(bitmap == numbersBig)
+    {
+        size = sizeof(numbersBig);
+    }
+    else if(bitmap == enemyFishy_plus_mask)
+    {
+        size = sizeof(enemyFishy_plus_mask);
+    }
+    else if(bitmap == enemyFish_plus_mask)
+    {
+        size = sizeof(enemyFish_plus_mask);
+    }
+    else if(bitmap == enemyJellyfish_plus_mask)
+    {
+        size = sizeof(enemyJellyfish_plus_mask);
+    }
+    else if(bitmap == enemyOctopus_plus_mask)
+    {
+        size = sizeof(enemyOctopus_plus_mask);
+    }
+    else if(bitmap == puff)
+    {
+        size = sizeof(puff);
+    }
+    else if(bitmap == enemyBullets)
+    {
+        size = sizeof(enemyBullets);
+    }
+    else if(bitmap == bossLife_plus_mask)
+    {
+        size = sizeof(bossLife_plus_mask);
+    }
+    else if(bitmap == Shark)
+    {
+        size = sizeof(Shark);
+    }
+    else if(bitmap == seahorse)
+    {
+        size = sizeof(seahorse);
+    }
+    else if(bitmap == seahorseFin)
+    {
+        size = sizeof(seahorseFin);
+    }
+    else if(bitmap == seahorseTiny)
+    {
+        size = sizeof(seahorseTiny);
+    }
+    else if(bitmap == pirateshipBowsprit)
+    {
+        size = sizeof(pirateshipBowsprit);
+    }
+    else if(bitmap == pirateshipCrowsnest)
+    {
+        size = sizeof(pirateshipCrowsnest);
+    }
+    else if(bitmap == pirateshipYardarm)
+    {
+        size = sizeof(pirateshipYardarm);
+    }
+    else if(bitmap == pirateshipSail)
+    {
+        size = sizeof(pirateshipSail);
+    }
+    else if(bitmap == pirateshipHull)
+    {
+        size = sizeof(pirateshipHull);
+    }
+    else if(bitmap == pirateSkull)
+    {
+        size = sizeof(pirateSkull);
+    }
+    else if(bitmap == sunRay)
+    {
+        size = sizeof(sunRay);
+    }
+    else if(bitmap == columnSmall_plus_mask)
+    {
+        size = sizeof(columnSmall_plus_mask);
+    }
+    else if(bitmap == columnBig_plus_mask)
+    {
+        size = sizeof(columnBig_plus_mask);
+    }
+    else if(bitmap == powerUP_plus_mask)
+    {
+        size = sizeof(powerUP_plus_mask);
+    }
+    else if(bitmap == protectionShield)
+    {
+        size = sizeof(protectionShield);
+    }
     else
     {
         assert(0);

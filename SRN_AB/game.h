@@ -105,7 +105,13 @@ void stateGameNextStage()
     sprites.drawSelfMasked(leftX, 28, textStage, 0);
     sprites.drawSelfMasked(rightX, 28, numbersBig, stage + 1);
   }
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&nextstageFases[gameOverAndStageFase]))();
+#else
+  ((FunctionPointer)(nextstageFases[gameOverAndStageFase]))();
+#endif
+
+
 };
 
 
@@ -122,7 +128,14 @@ void stateGamePlaying()
   checkPowerUP();
   checkBonus();
 
-  if (arduboy.everyXFrames(2)) ((FunctionPointer) pgm_read_word (&stages[stage - 1][currentWave]))();
+  if (arduboy.everyXFrames(2))
+  {
+#ifdef __AVR__
+    ((FunctionPointer) pgm_read_word (&stages[stage - 1][currentWave]))();
+#else
+    ((FunctionPointer)(stages[stage - 1][currentWave]))();
+#endif
+  }
 
   drawBackground();
   drawBosses();
@@ -174,7 +187,11 @@ const FunctionPointer PROGMEM gameOverFases[] =
 
 void stateGameOver()
 {
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&gameOverFases[gameOverAndStageFase]))();
+#else
+  ((FunctionPointer)(gameOverFases[gameOverAndStageFase]))();
+#endif
   sprites.drawSelfMasked(leftX, 16, textGame, 0);
   sprites.drawSelfMasked(rightX, 16, textOver, 0);
   if (objectVisible) {
@@ -194,7 +211,11 @@ const FunctionPointer PROGMEM gameEndFases[] =
 
 void stateGameEnded()
 {
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&gameEndFases[gameOverAndStageFase]))();
+#else
+  ((FunctionPointer)(gameEndFases[gameOverAndStageFase]))();
+#endif
  if (objectVisible) {
     checkMermaid();
     drawMermaid();
