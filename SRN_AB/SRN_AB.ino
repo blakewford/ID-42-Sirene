@@ -50,7 +50,11 @@ void loop() {
   if (!(arduboy.nextFrame())) return;
   arduboy.pollButtons();
   arduboy.clear();
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&mainGameLoop[gameState]))();
+#else
+  ((FunctionPointer)(mainGameLoop[gameState]))();
+#endif
   arduboy.display();
 }
 
