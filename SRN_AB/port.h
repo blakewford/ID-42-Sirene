@@ -24,14 +24,14 @@ const int32_t F_CPU = 16000000;
 void delay(uint32_t ms);
 long random(long howsmall, long howbig);
 
-enum
+enum: uint8_t
 {
-    LEFT_BUTTON,
-    RIGHT_BUTTON,
-    UP_BUTTON,
-    DOWN_BUTTON,
-    A_BUTTON,
-    B_BUTTON,
+    LEFT_BUTTON = 32,
+    RIGHT_BUTTON = 64,
+    UP_BUTTON = 128,
+    DOWN_BUTTON = 16,
+    A_BUTTON = 8,
+    B_BUTTON = 4
 };
 
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)

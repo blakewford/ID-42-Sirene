@@ -346,16 +346,26 @@ struct buttonState
 };
 
 buttonState gButtonState;
+buttonState gLiveButtonState;
 buttonState gCachedButtonState;
 
 bool Arduboy2Base::pressed(uint8_t buttons)
 {
-    return false;
+    int mask = 0;
+
+    if(gLiveButtonState.leftButton)  mask |= LEFT_BUTTON;
+    if(gLiveButtonState.rightButton) mask |= RIGHT_BUTTON;
+    if(gLiveButtonState.upButton)    mask |= UP_BUTTON;
+    if(gLiveButtonState.downButton)  mask |= DOWN_BUTTON;
+    if(gLiveButtonState.buttonA)     mask |= A_BUTTON;
+    if(gLiveButtonState.buttonB)     mask |= B_BUTTON;
+
+    return (buttons & mask) == buttons;
 }
 
 bool Arduboy2Base::notPressed(uint8_t buttons)
 {
-    return true;
+    return !pressed(buttons);
 }
 
 bool Arduboy2Base::justPressed(uint8_t button)
@@ -811,21 +821,51 @@ void* RenderThread(void* buffer)
             {
                 case SDLK_UP:
                     gButtonState.upButton = true;
+                    gLiveButtonState.upButton = true;
                     break;
                 case SDLK_LEFT:
                     gButtonState.leftButton = true;
+                    gLiveButtonState.leftButton = true;
                     break;
                 case SDLK_DOWN:
                     gButtonState.downButton = true;
+                    gLiveButtonState.downButton = true;
                     break;
                 case SDLK_RIGHT:
                     gButtonState.rightButton = true;
+                    gLiveButtonState.rightButton = true;
                     break;
                 case SDLK_a:
                     gButtonState.buttonA = true;
+                    gLiveButtonState.buttonA = true;
                     break;
                 case SDLK_b:
                     gButtonState.buttonB = true;
+                    gLiveButtonState.buttonB = true;
+                    break;
+            }
+        }
+        else if(e.type == SDL_KEYUP)
+        {
+            switch(e.key.keysym.sym)
+            {
+                case SDLK_UP:
+                    gLiveButtonState.upButton = false;
+                    break;
+                case SDLK_LEFT:
+                    gLiveButtonState.leftButton = false;
+                    break;
+                case SDLK_DOWN:
+                    gLiveButtonState.downButton = false;
+                    break;
+                case SDLK_RIGHT:
+                    gLiveButtonState.rightButton = false;
+                    break;
+                case SDLK_a:
+                    gLiveButtonState.buttonA = false;
+                    break;
+                case SDLK_b:
+                    gLiveButtonState.buttonB = false;
                     break;
             }
         }
