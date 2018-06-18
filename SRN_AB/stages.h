@@ -776,7 +776,7 @@ void drawScore(byte fontType)
 {
   char buf[10];
   //scorePlayer = arduboy.cpuLoad();
-  ltoa(scorePlayer, buf, 10);
+  ltoa_compat(scorePlayer, buf, 10);
   char charLen = strlen(buf);
   char pad = 7 - charLen;
 

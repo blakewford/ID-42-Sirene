@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include <thread>
+
 #include <chrono>
 using namespace std::chrono;
 
@@ -30,6 +31,7 @@ struct pgm
 
 pgm gScreen;
 uint64_t gFrame = 0;
+
 system_clock::time_point gSyncPoint;
 system_clock::time_point gAudioSyncPoint;
 milliseconds gFrameRate = milliseconds(1000);
@@ -299,7 +301,7 @@ long random(long howsmall, long howbig)
     return howsmall + (rand()%diff);
 }
 
-char* ltoa(long l, char * buffer, int radix)
+char* ltoa_compat(long l, char * buffer, int radix)
 {
     if(radix != 10) assert(0);
 
@@ -412,6 +414,7 @@ bool Arduboy2Base::nextFrame()
     }
 
     gSyncPoint = system_clock::now() + gFrameRate;
+
     gFrame++;
 
     return true;
@@ -590,7 +593,7 @@ unsigned long int getImageSize(const uint8_t *bitmap)
     {
         size = sizeof(magic);
     }
-    else if(bitmap == weapons)
+    else if(bitmap == *weapons)
     {
         size = sizeof(weapons);
     }
@@ -872,7 +875,11 @@ void* RenderThread(void* buffer)
     }
 }
 
+#if __linux__
 int main()
+#else
+int SDL_main(int argc, char *argv[])
+#endif
 {
     arduboy.clear();
     if(SDL_Init() < 0) return -1;

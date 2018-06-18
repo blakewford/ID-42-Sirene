@@ -160,7 +160,7 @@ void drawBonus()
     if (bonus[i].isActive && bonus[i].isVisible)
     {
       char buf[10];
-      ltoa(bonus[i].amount, buf, 10);
+      ltoa_compat(bonus[i].amount, buf, 10);
       char charLen = strlen(buf);
 
       sprites.drawSelfMasked(bonus[i].x, bonus[i].y, numbersSmall, 10);
