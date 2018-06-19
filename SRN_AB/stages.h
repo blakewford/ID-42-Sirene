@@ -26,6 +26,8 @@ boolean checkEndWave()
     test += bitRead(enemy[i].characteristics, 7);
   }
   if (test < 1) currentWave++;
+
+  return test;
 }
 
 void wait()

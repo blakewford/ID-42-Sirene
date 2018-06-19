@@ -873,6 +873,8 @@ void* RenderThread(void* buffer)
             }
         }
     }
+
+    return nullptr;
 }
 
 #if __linux__
@@ -891,4 +893,6 @@ int SDL_main(int argc, char *argv[])
         loop();
         RenderThread(texture);
     }
+
+    return 0;
 }

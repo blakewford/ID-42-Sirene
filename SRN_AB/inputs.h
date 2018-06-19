@@ -37,7 +37,7 @@ void checkInputs()
       coolDown[mermaid.weaponType]--;
       shootWeapon();
     }
-    if ((mermaid.weaponType == WEAPON_TYPE_SEASHELL))
+    if (mermaid.weaponType == WEAPON_TYPE_SEASHELL)
     {
       {
         coolDown[mermaid.weaponType]--;
