@@ -317,7 +317,11 @@ void wave250()
 {
   //Shark attack
   if (checkStartWave())setEndBoss();
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&sharkAttackFases[endBoss.attackFase]))();
+#else
+  ((FunctionPointer)(sharkAttackFases[endBoss.attackFase]))();
+#endif
   if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
@@ -325,7 +329,11 @@ void wave251()
 {
   //seahorse attack
   if (checkStartWave())setEndBoss();
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&seahorseAttackFases[endBoss.attackFase]))();
+#else
+  ((FunctionPointer)(seahorseAttackFases[endBoss.attackFase]))();
+#endif
   if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
@@ -333,7 +341,11 @@ void wave252()
 {
   //pirateShip attack
   if (checkStartWave())setEndBoss();
+#ifdef __AVR__
   ((FunctionPointer) pgm_read_word (&pirateShipAttackFases[endBoss.attackFase]))();
+#else
+  ((FunctionPointer)(pirateShipAttackFases[endBoss.attackFase]))();
+#endif
   if (!bitRead(endBoss.characteristics, 7)) currentWave++;
 }
 
