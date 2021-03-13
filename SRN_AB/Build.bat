@@ -1,1 +1,0 @@
-clang++ -I./SDL2/include -gdwarf-4 -std=c++14 -DPROGMEM= main.cpp -o sirene.exe -I. -include port.h -Wno-narrowing -fpermissive -fms-extensions -L./SDL2/lib/x64 -lSDL2main -lSDL2 -Xlinker /subsystem:windows -Xclang -flto-visibility-public-std

@@ -407,16 +407,7 @@ bool Arduboy2Base::collide(Rect rect1, Rect rect2)
 
 bool Arduboy2Base::nextFrame()
 {
-    while(system_clock::now() < gSyncPoint)
-    {
-//        std::this_thread::yield();
-        std::this_thread::sleep_for(nanoseconds(1));
-    }
-
-    gSyncPoint = system_clock::now() + gFrameRate;
-
     gFrame++;
-
     return true;
 }
 
@@ -443,41 +434,9 @@ ArduboyTones::ArduboyTones(bool (*outEn)())
 {
 }
 
-#include <SDL.h>
-
-SDL_AudioDeviceID gAudioDevice = ~0;
-SDL_AudioSpec gAudioSpec = {.freq=44100, .format=32784, .channels=2, .silence=0, .samples=4096, .padding=0, .size=0, .callback=nullptr, .userdata=nullptr};
 
 void ArduboyTones::tone(uint16_t freq, uint16_t dur)
 {
-    if(system_clock::now() < gAudioSyncPoint) return; //busy
-
-    assert(freq >= 16 && freq <= 32767);
-    assert(dur < (uint16_t)~0);
-
-    if(gAudioDevice < 0) return;
-
-    const int32_t scale = (gAudioSpec.freq/freq);
-
-    int32_t count = scale*2;
-    uint8_t* wav = new uint8_t[count];
-    while(count-- > scale)
-        wav[count] = 255;
-    while(count--)
-        wav[count] = 50;
-
-    count = ((gAudioSpec.freq/1000)*dur)/(scale*2);
-    while(count--)
-    {
-        if(SDL_QueueAudio(gAudioDevice, wav, scale*2) != 0)
-        {
-            break;
-        }
-    }
-
-    SDL_PauseAudioDevice(gAudioDevice, 0);
-    gAudioSyncPoint = system_clock::now() + milliseconds(200);
-    delete[] wav;
 }
 
 bool gAudioEnabled = true;
@@ -746,136 +705,17 @@ void Sprites::drawPlusMask(int16_t x, int16_t y, const uint8_t *bitmap, uint8_t 
     }
 }
 
-struct SDL_Components
-{
-    SDL_Window* w;
-    SDL_Texture* t;
-    SDL_Renderer* r;
-};
-
-SDL_Components gComponents;
-
 int32_t SDL_Init()
 {
-    if(SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) < 0) return -1;
-
-    gAudioDevice = SDL_OpenAudioDevice(nullptr, 0, &gAudioSpec, nullptr, 0);
-
-    gComponents.w = SDL_CreateWindow("Arduboy", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH*SCALE, HEIGHT*SCALE, SDL_WINDOW_SHOWN);
-    if(gComponents.w == nullptr) return -1;
-
-    gComponents.r = SDL_CreateRenderer(gComponents.w, -1, 0);
-    if(gComponents.r == nullptr) return -1;
-
-    SDL_RenderSetScale(gComponents.r, SCALE, SCALE);
-
-    SDL_Surface* s = SDL_CreateRGBSurface(0, WIDTH, HEIGHT, sizeof(uint32_t), 0, 0, 0, 0);
-    if(s == nullptr) return -1;
-
-    gComponents.t = SDL_CreateTextureFromSurface(gComponents.r, s);
-    if(gComponents.t == nullptr) return -1;
-
-    SDL_FreeSurface(s);
-
     return 0;
 }
 
 void SDL_Destroy()
 {
-    SDL_CloseAudioDevice(gAudioDevice);
-
-    SDL_DestroyTexture(gComponents.t);
-    SDL_DestroyRenderer(gComponents.r);
-    SDL_DestroyWindow(gComponents.w);
-    SDL_Quit();
 }
 
 const uint32_t SDL_BLACK = 0x00000000;
 const uint32_t SDL_WHITE = 0x00FFFFFF;
-
-void* RenderThread(void* buffer)
-{
-    SDL_Event e;
-    uint32_t* p = (uint32_t*)buffer;
-
-    int32_t j = 0;
-    int32_t i = (gScreen.height*gScreen.width);
-    while(i--)
-    {
-        p[j] = gScreen.image[j] == 0.0f ? SDL_BLACK: SDL_WHITE;
-        j++;
-    }
-
-    SDL_UpdateTexture(gComponents.t, nullptr, p, WIDTH*sizeof(uint32_t));
-    SDL_RenderClear(gComponents.r);
-    SDL_RenderCopy(gComponents.r, gComponents.t, nullptr, nullptr);
-    SDL_RenderPresent(gComponents.r);
-    while(SDL_PollEvent(&e) != 0)
-    {
-        if(e.type == SDL_QUIT)
-        {
-            SDL_Destroy();
-            gKeepGoing = false;
-            return nullptr;
-        }
-        else if(e.type == SDL_KEYDOWN)
-        {
-            switch(e.key.keysym.sym)
-            {
-                case SDLK_UP:
-                    gButtonState.upButton = true;
-                    gLiveButtonState.upButton = true;
-                    break;
-                case SDLK_LEFT:
-                    gButtonState.leftButton = true;
-                    gLiveButtonState.leftButton = true;
-                    break;
-                case SDLK_DOWN:
-                    gButtonState.downButton = true;
-                    gLiveButtonState.downButton = true;
-                    break;
-                case SDLK_RIGHT:
-                    gButtonState.rightButton = true;
-                    gLiveButtonState.rightButton = true;
-                    break;
-                case SDLK_a:
-                    gButtonState.buttonA = true;
-                    gLiveButtonState.buttonA = true;
-                    break;
-                case SDLK_b:
-                    gButtonState.buttonB = true;
-                    gLiveButtonState.buttonB = true;
-                    break;
-            }
-        }
-        else if(e.type == SDL_KEYUP)
-        {
-            switch(e.key.keysym.sym)
-            {
-                case SDLK_UP:
-                    gLiveButtonState.upButton = false;
-                    break;
-                case SDLK_LEFT:
-                    gLiveButtonState.leftButton = false;
-                    break;
-                case SDLK_DOWN:
-                    gLiveButtonState.downButton = false;
-                    break;
-                case SDLK_RIGHT:
-                    gLiveButtonState.rightButton = false;
-                    break;
-                case SDLK_a:
-                    gLiveButtonState.buttonA = false;
-                    break;
-                case SDLK_b:
-                    gLiveButtonState.buttonB = false;
-                    break;
-            }
-        }
-    }
-
-    return nullptr;
-}
 
 #if __linux__
 int main()
@@ -891,7 +731,6 @@ int SDL_main(int argc, char *argv[])
     while(gKeepGoing)
     {
         loop();
-        RenderThread(texture);
     }
 
     return 0;

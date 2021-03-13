@@ -42,10 +42,10 @@ const FunctionPointer PROGMEM  mainGameLoop[] = {
 
 void setup() {
   arduboy.begin();
-  arduboy.setFrameRate(60);                                 // set the frame rate of the game at 60 fps
+  arduboy.setFrameRate(60);
 }
 
-
+uint32_t shouldBreak = 32;
 void loop() {
   if (!(arduboy.nextFrame())) return;
   arduboy.pollButtons();
@@ -56,5 +56,14 @@ void loop() {
   ((FunctionPointer)(mainGameLoop[gameState]))();
 #endif
   arduboy.display();
+  gameState = STATE_GAME_PLAYING;
+  if(shouldBreak-- == 0)
+  {
+#ifdef __AVR__
+      asm("BREAK");
+#else
+      exit(0);
+#endif
+  }
 }
 

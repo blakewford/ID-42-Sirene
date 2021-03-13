@@ -693,7 +693,6 @@ void checkCollisions()
       if (!mermaid.isImune && !mermaid.hasShield)
       {
         mermaid.isImune = true;
-        mermaid.HP -= 1;
       }
       if (!bitRead(enemy[i].characteristics, 6))
       {
@@ -711,7 +710,6 @@ void checkCollisions()
       {
         sound.tone(2349, 15);
         mermaid.isImune = true;
-        mermaid.HP -= BULLET_DAMAGE;
         enemyBullet[i].isVisible = false;
       }
     }
@@ -742,7 +740,6 @@ void checkCollisions()
       if (!mermaid.isImune && !mermaid.hasShield)
       {
         mermaid.isImune = true;
-        mermaid.HP -= 1;
       }
     }
   }
